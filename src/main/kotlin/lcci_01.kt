@@ -1,3 +1,6 @@
+import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.set
 import kotlin.math.abs
 
 
@@ -72,7 +75,81 @@ fun oneEditAway(first: String, second: String): Boolean {
 
 // https://leetcode-cn.com/problems/compress-string-lcci/
 fun compressString(S: String): String {
+    if (S.isEmpty()) return ""
 
+    var currentChar = S[0]
+    var currentCount = 0
+
+    var result = ""
+    S.forEach {
+        if (it != currentChar) {
+            result += "${currentChar}${currentCount}"
+            currentChar = it
+            currentCount = 1
+        } else currentCount++
+    }
+
+    result += "${currentChar}${currentCount}"
+    return if (result.length >= S.length) S else result
+}
+
+// https://leetcode-cn.com/problems/rotate-matrix-lcci/
+fun rotate(matrix: Array<IntArray>): Unit {
+    if (matrix.isEmpty()) return
+
+    // size x size matrix.
+    val sizeIndex = matrix.size - 1
+
+    val tempMatrix = matrix.map { it.clone() }
+    tempMatrix.forEachIndexed { index, ints ->
+        val insertIndex = sizeIndex - index
+        for (i in 0..sizeIndex) {
+            matrix[i][insertIndex] = ints[i]
+        }
+    }
+}
+
+// https://leetcode-cn.com/problems/zero-matrix-lcci/
+fun setZeroes(matrix: Array<IntArray>): Unit {
+    if (matrix.isEmpty()) return
+
+    // Matrix: m x n.
+    val m = matrix.size
+    val n = matrix[0].size
+
+    val zeroRowIndex = LinkedHashSet<Int>()
+    val zeroColumnIndex = LinkedHashSet<Int>()
+    matrix.forEachIndexed { rowIndex, ints ->
+        ints.forEachIndexed { columnIndex, i ->
+            if (i == 0) {
+                zeroRowIndex.add(rowIndex)
+                zeroColumnIndex.add(columnIndex)
+            }
+        }
+    }
+
+    zeroRowIndex.forEach { matrix[it] = IntArray(n) { 0 } }
+    zeroColumnIndex.forEach { matrix.forEach { ints -> ints[it] = 0 } }
+}
+
+// https://leetcode-cn.com/problems/string-rotation-lcci/
+fun isFlipedString(s1: String, s2: String): Boolean {
+    if (s1.length != s2.length) return false
+    if (s1.isEmpty()) return true
+
+    // Rotate string to right given times, times should < string length.
+    fun rotate(rawString: String, times: Int): String {
+        val targetIndex = rawString.length - times
+        return rawString.substring(targetIndex) + rawString.substring(0, targetIndex)
+    }
+
+    for (i in 1 until s1.length)
+        if (rotate(s1, i) == s2)
+            return true
+
+    // s1.length == 1 && s1 == s2.
+    if (s1 == s2) return true
+    return false
 }
 
 fun main() {
@@ -81,4 +158,9 @@ fun main() {
     println(oneEditAway("pale", "ple"))
     println(oneEditAway("pales", "pal"))
     println(oneEditAway("a", "ab"))
+
+    rotate(arrayOf(intArrayOf(1, 2, 3), intArrayOf(4, 5, 6), intArrayOf(7, 8, 9)))
+
+    setZeroes(arrayOf(intArrayOf(1, 1, 1), intArrayOf(1, 0, 1), intArrayOf(1, 1, 1)))
+    setZeroes(arrayOf(intArrayOf(0, 1, 2, 0), intArrayOf(3, 4, 5, 2), intArrayOf(1, 3, 1, 5)))
 }
