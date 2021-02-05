@@ -41,6 +41,27 @@ class TripleInOne(stackSize: Int) {
     }
 }
 
+// https://leetcode-cn.com/problems/min-stack-lcci/
+class MinStack() {
+    val stack = Stack<Int>()
+
+    fun push(x: Int) {
+        stack.push(x)
+    }
+
+    fun pop() {
+        stack.pop()
+    }
+
+    fun top(): Int {
+        return stack.peek()
+    }
+
+    fun getMin(): Int {
+        return Collections.min(stack)
+    }
+}
+
 fun main() {
     val tio = TripleInOne(1)
     tio.apply {
