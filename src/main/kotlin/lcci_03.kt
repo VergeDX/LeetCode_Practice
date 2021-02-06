@@ -1,8 +1,8 @@
 import java.util.*
+import kotlin.collections.ArrayList
 
 // https://leetcode-cn.com/problems/three-in-one-lcci/
-class TripleInOne(stackSize: Int) {
-    val temp = stackSize
+class TripleInOne(val stackSize: Int) {
     val stackOne = Stack<Int>()
     val stackTwo = Stack<Int>()
     val stackThree = Stack<Int>()
@@ -17,7 +17,7 @@ class TripleInOne(stackSize: Int) {
     }
 
     private fun Stack<Int>.canPush(): Boolean {
-        if (this.size == this@TripleInOne.temp) return false
+        if (this.size == this@TripleInOne.stackSize) return false
         return true
     }
 
@@ -62,6 +62,68 @@ class MinStack() {
     }
 }
 
+// https://leetcode-cn.com/problems/stack-of-plates-lcci/
+class StackOfPlates(val cap: Int) {
+    val stackList = ArrayList<Stack<Int>>()
+
+    fun push(`val`: Int) {
+        if (cap == 0) return
+
+        // cap != 0 here.
+        if (stackList.isEmpty() || stackList.last().size == cap)
+            stackList += Stack<Int>().apply { push(`val`) }
+        else stackList.last().push(`val`)
+    }
+
+    fun pop(): Int {
+        // last() will raise exception if list empty.
+        if (stackList.isEmpty()) return -1
+
+        // Last stack size == 1, pop & remove it.
+        if (stackList.last().size == 1) {
+            val lastStack = stackList.last()
+            val result = lastStack.pop()
+            stackList.remove(lastStack)
+            return result
+        }
+
+        // stackList.last() exists, and it size != 1.
+        return stackList.last().pop()
+    }
+
+    fun popAt(index: Int): Int {
+        // index is legal.
+        if (stackList.size > index) {
+            val stack = stackList[index]
+            val result = stack.pop()
+            if (stack.isEmpty()) stackList.remove(stack)
+            return result
+        }
+        return -1
+    }
+}
+
+// https://leetcode-cn.com/problems/implement-queue-using-stacks-lcci/
+class MyQueue() {
+    val queue = ArrayList<Int>()
+
+    fun push(x: Int) {
+        queue += x
+    }
+
+    fun pop(): Int {
+        return queue.removeAt(0)
+    }
+
+    fun peek(): Int {
+        return queue[0]
+    }
+
+    fun empty(): Boolean {
+        return queue.isEmpty()
+    }
+}
+
 fun main() {
     val tio = TripleInOne(1)
     tio.apply {
@@ -72,4 +134,6 @@ fun main() {
         pop(0)
         isEmpty(0)
     }
+
+    // Stack<Int>().last()
 }
