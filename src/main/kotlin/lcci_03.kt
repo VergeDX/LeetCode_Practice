@@ -124,6 +124,34 @@ class MyQueue() {
     }
 }
 
+// https://leetcode-cn.com/problems/sort-of-stacks-lcci/
+class SortedStack() {
+    val innerStack = Stack<Int>()
+
+    fun push(`val`: Int) {
+        innerStack.push(`val`)
+
+        // Only push can mess up the order of stack.
+        innerStack.sortByDescending { it }
+    }
+
+    fun pop() {
+        // Ignore EmptyStackException.
+        innerStack.runCatching { pop() }
+    }
+
+
+    fun peek(): Int {
+        return innerStack.runCatching { peek() }
+            // Return -1 if stack empty.
+            .getOrDefault(-1)
+    }
+
+    fun isEmpty(): Boolean {
+        return innerStack.isEmpty()
+    }
+}
+
 fun main() {
     val tio = TripleInOne(1)
     tio.apply {
