@@ -152,6 +152,43 @@ class SortedStack() {
     }
 }
 
+// https://leetcode-cn.com/problems/animal-shelter-lcci/
+class AnimalShelf() {
+    // 0 -> Cat, 1 -> Dog.
+    val innerCatList = LinkedList<IntArray>()
+    val innerDogList = LinkedList<IntArray>()
+
+    val nope = intArrayOf(-1, -1)
+
+    fun enqueue(animal: IntArray) {
+        when (animal[1]) {
+            0 -> innerCatList.add(animal)
+            1 -> innerDogList.add(animal)
+        }
+    }
+
+    fun dequeueAny(): IntArray {
+        val sumList = innerCatList + innerDogList
+        val result = sumList.sortedBy { it[0] }.elementAtOrElse(0) { nope }
+
+        innerDogList.runCatching { remove(result) }
+        innerCatList.runCatching { remove(result) }
+        return result
+    }
+
+    fun dequeueDog(): IntArray {
+        val result = innerDogList.sortedBy { it[0] }.elementAtOrElse(0) { nope }
+        innerDogList.runCatching { remove(result) }
+        return result
+    }
+
+    fun dequeueCat(): IntArray {
+        val result = innerCatList.sortedBy { it[0] }.elementAtOrElse(0) { nope }
+        innerCatList.runCatching { remove(result) }
+        return result
+    }
+}
+
 fun main() {
     val tio = TripleInOne(1)
     tio.apply {
