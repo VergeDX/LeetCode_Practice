@@ -1,41 +1,27 @@
 // https://leetcode-cn.com/problems/route-between-nodes-lcci/
 fun findWhetherExistsPath(n: Int, graph: Array<IntArray>, start: Int, target: Int): Boolean {
     val filteredGraph = graph.distinctBy { (it[0] to it[1]).hashCode() }.toTypedArray()
+    val nodeEdgeMap = HashMap<Int, HashSet<Int>>()
+
+    // Init nodeEdgeMap by using given n, for i in [0, n).
+    for (i in 0 until n) nodeEdgeMap[i] = HashSet()
+
+    // nodeEdgeMap[it[0]] should be exists, because it[0] in range [0, n) too.
+    graph.forEach { nodeEdgeMap[it[0]]!!.add(it[1]) }
 
     if (start == target) return true
 
     val visitedSet = HashSet<Int>()
 
-    // Helper function.
-    fun Array<IntArray>.findEdge(v: Int): Set<Int> {
-        val resultSet = HashSet<Int>()
-        // Use Pair, avoid IntArray in Set issues.
-        this.forEach { if (it[0] == v) resultSet += it[1] }
-        return resultSet
-    }
-
     // https://oi-wiki.org/graph/dfs/
     fun Array<IntArray>.DFS(v: Int) {
         visitedSet.add(v)
-        for (u in this.findEdge(v)) {
+        for (u in nodeEdgeMap[v]!!) {
             if (u !in visitedSet) DFS(u)
         }
     }
 
-    // https://oi-wiki.org/graph/bfs/
-    fun Array<IntArray>.BFS(v: Int) {
-        val Q = ArrayList<Int>().apply { add(v) }
-        while (Q.isNotEmpty()) {
-            // LeetCode: Kotlin 1.3.10. val currentNode = Q.removeFirst()
-            val currentNode = Q.removeAt(0)
-
-            visitedSet.add(currentNode)
-            Q.addAll(this.findEdge(currentNode))
-        }
-    }
-
-    // filteredGraph.DFS(start)
-    filteredGraph.BFS(start)
+    filteredGraph.DFS(start)
 
     return target in visitedSet
 }
