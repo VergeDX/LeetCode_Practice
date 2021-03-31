@@ -21,6 +21,35 @@ public class Others {
         else return inOrderList.get(inOrderIndex + 1);
     }
 
+    // https://stackoverflow.com/questions/6359847/convert-double-to-binary-representation
+    public static String toBinary(double d, int precision) {
+        long wholePart = (long) d;
+        return wholeToBinary(wholePart) + '.' + fractionalToBinary(d - wholePart, precision);
+    }
+
+    private static String wholeToBinary(long l) {
+        return Long.toBinaryString(l);
+    }
+
+    private static String fractionalToBinary(double num, int precision) {
+        StringBuilder binary = new StringBuilder();
+        while (num > 0 && binary.length() < precision) {
+            double r = num * 2;
+            if (r >= 1) {
+                binary.append(1);
+                num = r - 1;
+            } else {
+                binary.append(0);
+                num = r;
+            }
+        }
+        return binary.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(toBinary(0.1, 32));
+    }
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         // First, do DFS and make the map.
         dfsToBuildMap(root);
@@ -47,6 +76,12 @@ public class Others {
             tnsFatherIs.put(node.right, node);
             dfsToBuildMap(node.right);
         }
+    }
+
+    public String printBin(double num) {
+        String preResult = toBinary(num, 32);
+        if (preResult.length() == 34) return "ERROR";
+        else return preResult;
     }
 
     // https://leetcode-cn.com/problems/delete-middle-node-lcci/submissions/
@@ -106,40 +141,5 @@ public class Others {
         TreeNode(int x) {
             val = x;
         }
-    }
-
-    // https://stackoverflow.com/questions/6359847/convert-double-to-binary-representation
-    public static String toBinary(double d, int precision) {
-        long wholePart = (long) d;
-        return wholeToBinary(wholePart) + '.' + fractionalToBinary(d - wholePart, precision);
-    }
-
-    private static String wholeToBinary(long l) {
-        return Long.toBinaryString(l);
-    }
-
-    private static String fractionalToBinary(double num, int precision) {
-        StringBuilder binary = new StringBuilder();
-        while (num > 0 && binary.length() < precision) {
-            double r = num * 2;
-            if (r >= 1) {
-                binary.append(1);
-                num = r - 1;
-            } else {
-                binary.append(0);
-                num = r;
-            }
-        }
-        return binary.toString();
-    }
-
-    public String printBin(double num) {
-        String preResult = toBinary(num, 32);
-        if (preResult.length() == 34) return "ERROR";
-        else return preResult;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(toBinary(0.1, 32));
     }
 }

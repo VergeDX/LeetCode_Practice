@@ -1,3 +1,5 @@
+package org.hydev.lcci
+
 import kotlin.math.abs
 
 // https://leetcode-cn.com/problems/route-between-nodes-lcci/
