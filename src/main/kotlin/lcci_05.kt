@@ -71,6 +71,12 @@ fun exchangeBits(num: Int): Int {
     return Integer.parseInt(binary, 2)
 }
 
+// https://leetcode-cn.com/problems/draw-line-lcci/
+fun drawLine(length: Int, w: Int, x1: Int, x2: Int, y: Int): IntArray {
+    // Cannot understand : (
+    TODO()
+}
+
 fun main() {
     // println(insertBits(1024, 19, 2, 6))
     // println(insertBits(0, 31, 0, 4))
